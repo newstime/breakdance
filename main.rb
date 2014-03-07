@@ -2,6 +2,7 @@ require 'goliath'
 require 'em-synchrony/em-http'
 require 'em-http/middleware/json_response'
 require 'yajl'
+require 'superfreak'
 
 # automatically parse the JSON HTTP response
 EM::HttpRequest.use EventMachine::Middleware::JSONResponse
@@ -13,6 +14,7 @@ class LineBreakingService < Goliath::API
   use Goliath::Rack::Render
 
   def response(env)
+    FontProfile
     resp = { }
     [200, {'Content-Type' => 'application/json'}, resp]
   end
