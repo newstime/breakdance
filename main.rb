@@ -2,9 +2,8 @@ require 'goliath'
 require 'em-synchrony/em-http'
 require 'em-http/middleware/json_response'
 require 'yajl'
-require 'superfreak'
+require 'superbreak'
 require 'nokogiri'
-
 
 # automatically parse the JSON HTTP response
 EM::HttpRequest.use EventMachine::Middleware::JSONResponse
