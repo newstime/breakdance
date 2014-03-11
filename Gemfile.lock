@@ -149,6 +149,7 @@ DEPENDENCIES
   foreman
   goliath
   mongoid (~> 4.0.0.alpha1)!
+  nokogiri (~> 1.6.0)
   sidekiq
   superbreak!
   yajl-ruby
