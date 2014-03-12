@@ -21,8 +21,8 @@ class LineBreakingService < Goliath::API
     #FontProfile
     logger.info "Processing Request #{params}"
 
-    width         = params[:width] || 284
-    limit         = params[:limit] || 100
+    width         = (params['width'] || 284).to_i
+    limit         = (params['limit'] || 100).to_i
 
     html = params["html"]
     doc = Nokogiri::HTML(html)
