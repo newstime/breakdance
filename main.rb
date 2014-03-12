@@ -4,11 +4,14 @@ require 'em-http/middleware/json_response'
 require 'yajl'
 require 'superbreak'
 require 'nokogiri'
+require 'active_support/all'
 
 # automatically parse the JSON HTTP response
 EM::HttpRequest.use EventMachine::Middleware::JSONResponse
 
 class LineBreakingService < Goliath::API
+  FONT_PROFILES_PATH = File.expand_path('../config/font_profiles', __FILE__)
+
   # parse query params and auto format JSON response
   use Goliath::Rack::Params
   use Goliath::Rack::Formatters::JSON
@@ -25,7 +28,7 @@ class LineBreakingService < Goliath::API
     doc = Nokogiri::HTML(html)
     elements = doc.css("body > *")
 
-    line_streamer = LineStreamer.new(elements, width: width)
+    line_streamer = LineStreamer.new(elements, width: width, font_profiles_path: FONT_PROFILES_PATH)
     html = line_streamer.take(limit).html_safe
 
     resp = {
