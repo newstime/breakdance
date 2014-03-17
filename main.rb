@@ -5,6 +5,7 @@ require 'yajl'
 require 'superbreak'
 require 'nokogiri'
 require 'active_support/all'
+require 'debugger'  # Only in development
 
 # automatically parse the JSON HTTP response
 EM::HttpRequest.use EventMachine::Middleware::JSONResponse
@@ -31,9 +32,23 @@ class LineBreakingService < Goliath::API
     line_streamer = LineStreamer.new(elements, width: width, font_profiles_path: FONT_PROFILES_PATH)
     html = line_streamer.take(limit).html_safe
 
+    # TODO: Return Bool If Overflow Activated
+    # TODO: Return Overflow HTML
+    # TODO: Use Height and Overflow Buffer instead of Limit for caclulating what
+    # to take
+
     resp = {
       html: html
     }
-    [200, {'Content-Type' => 'application/json'}, resp]
+
+    if params['callback']
+      # JSONP Response
+      resp = "#{params['callback']}(#{resp.to_json})"
+      [200, {'Content-Type' => 'text/javascript'}, resp]
+    else
+      # JSON Response
+      [200, {'Content-Type' => 'application/json'}, resp]
+    end
+
   end
 end
