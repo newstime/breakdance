@@ -47,13 +47,25 @@ class LineBreakingService < Goliath::API
     options = { width: width, font_profiles_path: FONT_PROFILES_PATH }
     paragraph_line_printers = paragraphs.map { |p| ParagraphLinePrinter.new(p, column_width, font_profile, options) }
 
-    current_paragraph_line_printer = paragraph_line_printers.shift
+    total_lines = paragraph_line_printers.map(&:line_count).inject(:+)
 
-    line_count = max_lines
-    line_count = overflowed_lines
+    current_paragraph_line_printer = paragraph_line_printers.shift
 
     output = StringIO.new
 
+    line_count = nil
+    overflowed = nil
+    if total_lines > max_lines
+      # Run overflow
+      line_count = overflowed_lines
+      overflowed = true
+    else
+      # Run exausted
+      line_count = max_lines
+      overflowed = false
+    end
+
+    # Capture as if overflowed
     while line_count > 0
       line_count -= current_paragraph_line_printer.print(line_count, output)
 
@@ -63,6 +75,12 @@ class LineBreakingService < Goliath::API
         break unless current_paragraph_line_printer
       end
     end
+
+    # Capture overflow html
+    #current_paragraph_line_printer.overflow_html
+
+    # TODO: Capture overflow html
+    #line_count = max_lines
 
     html = output.string.html_safe
 
@@ -76,7 +94,7 @@ class LineBreakingService < Goliath::API
 
     resp = {
       html: html,
-      overflowed: false,
+      overflowed: overflowed,
       overflow_html: html
     }
 
