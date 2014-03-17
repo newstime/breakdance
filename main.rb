@@ -39,16 +39,14 @@ class LineBreakingService < Goliath::API
 
     html = params["html"]
     doc = Nokogiri::HTML(html)
-    elements = doc.css("body > *")
+    paragraphs = doc.css("body > p")
 
+    column_width = LinearMeasure.new("#{width}px")
+    font_profile = options[:profile] || FontProfile.get('trykker', font_profiles_path: FONT_PROFILES_PATH)
 
-
-
-    options      = { width: width, font_profiles_path: FONT_PROFILES_PATH }
-    paragraphs   = elements
-    column_width = LinearMeasure.new("#{options[:width]}px" || "225px")
-    font_profile = options[:profile] || FontProfile.get('trykker', font_profiles_path: options[:font_profiles_path])
+    options = { width: width, font_profiles_path: FONT_PROFILES_PATH }
     paragraph_line_printers = paragraphs.map { |p| ParagraphLinePrinter.new(p, column_width, font_profile, options) }
+
     current_paragraph_line_printer = paragraph_line_printers.shift
 
     line_count = max_lines
@@ -78,7 +76,7 @@ class LineBreakingService < Goliath::API
 
     resp = {
       html: html,
-      overflowed: true,
+      overflowed: false,
       overflow_html: html
     }
 
