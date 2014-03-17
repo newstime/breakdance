@@ -65,7 +65,6 @@ class LineBreakingService < Goliath::API
       overflowed = false
     end
 
-    # Capture as if overflowed
     while line_count > 0
       line_count -= current_paragraph_line_printer.print(line_count, output)
 
@@ -76,26 +75,21 @@ class LineBreakingService < Goliath::API
       end
     end
 
-    # Capture overflow html
-    #current_paragraph_line_printer.overflow_html
-
-    # TODO: Capture overflow html
-    #line_count = max_lines
+    overflow_html = ""
+    if overflowed
+      # Capture overflow html
+      #current_paragraph_line_printer.overflow_html
+      #overflow_html = "blakes"
+    end
 
     html = output.string.html_safe
 
-    #line_streamer = LineStreamer.new(elements, width: width, font_profiles_path: FONT_PROFILES_PATH)
-    #html = line_streamer.take(limit).html_safe
-
-    # TODO: Return Bool If Overflow Activated
     # TODO: Return Overflow HTML
-    # TODO: Use Height and Overflow Buffer instead of Limit for caclulating what
-    # to take
 
     resp = {
       html: html,
       overflowed: overflowed,
-      overflow_html: html
+      overflow_html: overflow_html
     }
 
     if params['callback']
