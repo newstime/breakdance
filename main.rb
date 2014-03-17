@@ -22,14 +22,28 @@ class LineBreakingService < Goliath::API
     #FontProfile
     logger.info "Processing Request #{params}"
 
-    width         = (params['width'] || 284).to_i
-    limit         = (params['limit'] || 100).to_i
+    width              = (params['width'] || 284).to_i
+    height             = (params['height'] || '200px').to_i
+    line_height        = (params['line_height'] || '20px').to_i
+    overflow_reserve   = (params['overflow_reserve'] || '50px').to_i
+
+
+    # Caluclate limit based on line height
+
+    # Max lines to take without overflow.
+    max_lines = height/line_height
+    # Number of lines to return if overflowed.
+    overflowed_lines = (height-overflow_reserve)/line_height
+
+    #limit         = (params['limit'] || 100).to_i
 
     html = params["html"]
     doc = Nokogiri::HTML(html)
     elements = doc.css("body > *")
 
     line_streamer = LineStreamer.new(elements, width: width, font_profiles_path: FONT_PROFILES_PATH)
+    limit = max_lines
+    limit = overflowed_lines
     html = line_streamer.take(limit).html_safe
 
     # TODO: Return Bool If Overflow Activated
