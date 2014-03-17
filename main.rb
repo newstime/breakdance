@@ -41,10 +41,35 @@ class LineBreakingService < Goliath::API
     doc = Nokogiri::HTML(html)
     elements = doc.css("body > *")
 
-    line_streamer = LineStreamer.new(elements, width: width, font_profiles_path: FONT_PROFILES_PATH)
-    limit = max_lines
-    limit = overflowed_lines
-    html = line_streamer.take(limit).html_safe
+
+
+
+    options      = { width: width, font_profiles_path: FONT_PROFILES_PATH }
+    paragraphs   = elements
+    column_width = LinearMeasure.new("#{options[:width]}px" || "225px")
+    font_profile = options[:profile] || FontProfile.get('trykker', font_profiles_path: options[:font_profiles_path])
+    paragraph_line_printers = paragraphs.map { |p| ParagraphLinePrinter.new(p, column_width, font_profile, options) }
+    current_paragraph_line_printer = paragraph_line_printers.shift
+
+    line_count = max_lines
+    line_count = overflowed_lines
+
+    output = StringIO.new
+
+    while line_count > 0
+      line_count -= current_paragraph_line_printer.print(line_count, output)
+
+      # Load next paragraph stream if needed.
+      if current_paragraph_line_printer.exhasusted?
+        current_paragraph_line_printer = paragraph_line_printers.shift
+        break unless current_paragraph_line_printer
+      end
+    end
+
+    html = output.string.html_safe
+
+    #line_streamer = LineStreamer.new(elements, width: width, font_profiles_path: FONT_PROFILES_PATH)
+    #html = line_streamer.take(limit).html_safe
 
     # TODO: Return Bool If Overflow Activated
     # TODO: Return Overflow HTML
@@ -52,7 +77,9 @@ class LineBreakingService < Goliath::API
     # to take
 
     resp = {
-      html: html
+      html: html,
+      overflowed: true,
+      overflow_html: html
     }
 
     if params['callback']
