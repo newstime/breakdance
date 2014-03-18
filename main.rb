@@ -25,7 +25,7 @@ class LineBreakingService < Goliath::API
     width              = (params['width'] || 284).to_i
     height             = (params['height'] || '200px').to_i
     line_height        = (params['line_height'] || '20px').to_i
-    overflow_reserve   = (params['overflow_reserve'] || '50px').to_i
+    overflow_reserve   = (params['overflow_reserve'] || '0px').to_i
 
 
     # Caluclate limit based on line height
@@ -41,13 +41,14 @@ class LineBreakingService < Goliath::API
     doc = Nokogiri::HTML(html)
     paragraphs = doc.css("body > p")
 
+
     column_width = LinearMeasure.new("#{width}px")
     font_profile = options[:profile] || FontProfile.get('trykker', font_profiles_path: FONT_PROFILES_PATH)
 
     options = { width: width, font_profiles_path: FONT_PROFILES_PATH }
     paragraph_line_printers = paragraphs.map { |p| ParagraphLinePrinter.new(p, column_width, font_profile, options) }
 
-    total_lines = paragraph_line_printers.map(&:line_count).inject(:+)
+    total_lines = paragraph_line_printers.map(&:line_count).inject(:+) || 0 # HACK
 
     current_paragraph_line_printer = paragraph_line_printers.shift
 
@@ -65,13 +66,16 @@ class LineBreakingService < Goliath::API
       overflowed = false
     end
 
+
+    logger.info "Processing Request #{params}"
     while line_count > 0
+      break unless current_paragraph_line_printer
       line_count -= current_paragraph_line_printer.print(line_count, output)
+      logger.info output.string
 
       # Load next paragraph stream if needed.
       if current_paragraph_line_printer.exhasusted?
         current_paragraph_line_printer = paragraph_line_printers.shift
-        break unless current_paragraph_line_printer
       end
     end
 
