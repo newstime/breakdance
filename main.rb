@@ -77,14 +77,15 @@ class LineBreakingService < Goliath::API
 
     overflow_html = ""
     if overflowed
-      # Capture overflow html
-      #current_paragraph_line_printer.overflow_html
-      #overflow_html = "blakes"
+      if current_paragraph_line_printer
+        overflow_html << current_paragraph_line_printer.remaining_html
+      end
+      paragraph_line_printers.each do |lbp|
+        overflow_html << lbp.remaining_html
+      end
     end
 
     html = output.string.html_safe
-
-    # TODO: Return Overflow HTML
 
     resp = {
       html: html,
