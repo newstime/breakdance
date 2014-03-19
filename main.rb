@@ -70,10 +70,15 @@ class LineBreakingService < Goliath::API
     while line_count > 0
       break unless current_paragraph_line_printer
       lines_printed = current_paragraph_line_printer.print(line_count, output)
+
+      if lines_printed == 0 && line_count > 0
+        raise "No lines returned from line printer when there should have been."
+      end
+
       line_count -= lines_printed
 
       # Load next paragraph stream if needed.
-      if current_paragraph_line_printer.exhasusted? || lines_printed.zero?
+      if current_paragraph_line_printer.exhasusted?
         current_paragraph_line_printer = paragraph_line_printers.shift
       end
     end
