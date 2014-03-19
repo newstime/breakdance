@@ -51,7 +51,6 @@ class LineBreakingService < Goliath::API
     total_lines = paragraph_line_printers.map(&:line_count).inject(:+) || 0 # HACK
 
     current_paragraph_line_printer = paragraph_line_printers.shift
-
     output = StringIO.new
 
     line_count = nil
@@ -70,11 +69,11 @@ class LineBreakingService < Goliath::API
     logger.info "Processing Request #{params}"
     while line_count > 0
       break unless current_paragraph_line_printer
-      line_count -= current_paragraph_line_printer.print(line_count, output)
-      logger.info output.string
+      lines_printed = current_paragraph_line_printer.print(line_count, output)
+      line_count -= lines_printed
 
       # Load next paragraph stream if needed.
-      if current_paragraph_line_printer.exhasusted?
+      if current_paragraph_line_printer.exhasusted? || lines_printed.zero?
         current_paragraph_line_printer = paragraph_line_printers.shift
       end
     end
