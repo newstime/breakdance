@@ -5,7 +5,6 @@ require 'yajl'
 require 'superbreak'
 require 'nokogiri'
 require 'active_support/all'
-require 'debugger'  # Only in development
 
 # automatically parse the JSON HTTP response
 EM::HttpRequest.use EventMachine::Middleware::JSONResponse
