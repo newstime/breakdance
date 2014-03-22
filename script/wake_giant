@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+# Starts Goliath server
+
+bundle exec ruby main.rb -d -e prod -S goliath.sock
