@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+
+# Stops Goliath server
+
+kill $(cat goliath.pid)
+rm goliath.pid
+rm goliath.sock

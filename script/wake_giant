@@ -2,4 +2,9 @@
 
 # Starts Goliath server
 
-bundle exec ruby main.rb -d -e prod -S goliath.sock
+if [ -a goliath.pid ]; then
+  echo "Goliath.pid already present. Is server running?"
+  exit 1
+else
+  bundle exec ruby main.rb -d -e prod -S goliath.sock
+fi
