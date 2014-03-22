@@ -20,7 +20,7 @@ GIT
       text-hyphen (~> 1.4.1)
 
 PATH
-  remote: ../superbreak
+  remote: superbreak
   specs:
     superbreak (0.0.1)
       json (~> 1.8.1)
