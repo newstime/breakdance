@@ -1,3 +1,4 @@
 #!/bin/sh
-touch tmp/restart.txt
-echo "restarting Passenger app"
+script/slay_giant
+script/wake_giant
+echo "restarting goliath app"
