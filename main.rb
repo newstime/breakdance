@@ -42,7 +42,7 @@ class LineBreakingService < Goliath::API
 
 
     column_width = LinearMeasure.new("#{width}px")
-    font_profile = options[:profile] || FontProfile.get('trykker', font_profiles_path: FONT_PROFILES_PATH)
+    font_profile = options[:profile] || FontProfile.get('crimson_text', font_profiles_path: FONT_PROFILES_PATH)
 
     options = { width: width, font_profiles_path: FONT_PROFILES_PATH }
     paragraph_line_printers = paragraphs.map { |p| ParagraphLinePrinter.new(p, column_width, font_profile, options) }
