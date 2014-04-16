@@ -200,6 +200,8 @@ class ParagraphLinePrinter
     end
 
     # Superimpose links
+    inserted_link_offset = 0 # Record offset that should be honered due to inserted links.
+
     @link_map.each do |from, to, text, attributes|
       if (@character_index <= to) && (from <= @character_index + line_length)
         # Splice in the link.
@@ -211,12 +213,13 @@ class ParagraphLinePrinter
           end_splice += 1
         end
 
-        content = line[begin_splice...end_splice]
-        line[begin_splice...end_splice] = "<a #{attributes.map { |k, v| "#{k}=\"#{v.value}\"" }.join}>#{content}</a>"
+        range = (begin_splice+inserted_link_offset)...(end_splice+inserted_link_offset)
+        content = line[range]
+        starting_length = line.length
+        line[range] = "<a #{attributes.map { |k, v| "#{k}=\"#{v.value}\"" }.join}>#{content}</a>"
+        new_length = line.length
+        inserted_link_offset += new_length - starting_length
 
-        #line[begin_splice...end_splice] = "our"
-        #line[end_splice] = "our"
-        # In range
       end
     end
 
