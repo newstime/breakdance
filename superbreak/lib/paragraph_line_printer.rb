@@ -136,11 +136,8 @@ class ParagraphLinePrinter
   def get_next_line
     return nil if exhasusted?
 
-    stringio = StringIO.new
-
+    line = ""
     tokens, breakpoint = @lines[@index]
-
-    stringio.write("<span class=\"line\">")
 
     # skip over glue and penalties at the beginning of each line
 
@@ -157,19 +154,20 @@ class ParagraphLinePrinter
         utf_encoded_token_content = token.content.force_encoding(Encoding::UTF_8)
         @remaining_text.sub!(/^#{Regexp.quote(utf_encoded_token_content)}/, '') # Strip word
 
-        stringio.write(token.content)
+        line << token.content
       when Crawdad::Tokens::Glue
         @remaining_text.lstrip!
-        stringio.write(" ")
+        line << " "
       end
     end
     last_token = tokens.last
     if last_token.class == Crawdad::Tokens::Penalty && last_token[:flagged] == 1
-      stringio.write("-")
+      line << "-"
     end
-    stringio.write("</span> ")
+
     @index += 1
-    stringio.string
+
+    "<span class=\"line\">#{line}</span>"
   end
 
 end
