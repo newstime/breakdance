@@ -34,8 +34,6 @@ class LineBreakingService < Goliath::API
     # Number of lines to return if overflowed.
     overflowed_lines = (height-overflow_reserve)/line_height
 
-    #limit         = (params['limit'] || 100).to_i
-
     html = params["html"]
     doc = Nokogiri::HTML(html)
     paragraphs = doc.css("body > p")

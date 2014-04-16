@@ -13,6 +13,32 @@ class ParagraphLinePrinter
     @text = @paragraph.text # Just text for now.
     @remaining_text = @text
 
+    # ## Construct Link Map
+    #
+    # The link map note where links span, along with link attributes.
+    # 1. Get all links from the paragraphs
+    # 2. Extract attributes
+    # 3. Determine what chracter poisitons they span
+
+    @paragraph_children = @paragraph.children
+    @link_map = []
+
+    link_map_current_location = 0
+    @paragraph_children.each do |el|
+      text = el.text.strip
+      text_length = text.length
+      attributes = el.attributes
+      if el.name == 'a'
+        @link_map << [
+          link_map_current_location,               # From
+          link_map_current_location + text_length, # To
+          text,                                    # Text
+          attributes                               # Link Attributes
+        ]
+      end
+      link_map_current_location += text_length
+    end
+
     @index = 0
     @character_index = 0
     @classes = @paragraph['class'].to_s.split(' ')
