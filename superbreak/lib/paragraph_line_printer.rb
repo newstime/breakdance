@@ -24,18 +24,48 @@ class ParagraphLinePrinter
     @link_map = []
 
     link_map_current_location = 0
+    text_dup = @text.dup # Make a duplicate of text for measurements for map
+
+    # Clean up for mapping.
+    text_dup.strip!
+    text_dup.gsub!(/ +/, ' ')
+    text_dup.gsub!("\r", '')
+    text_dup.gsub!("\n", '')
+    text_dup.gsub!("\t", '')
+
+    text_dup_length = text_dup.length
     @paragraph_children.each do |el|
-      text = el.text.strip
-      text_length = text.length
+      el_text = el.text.strip
+
+      el_text.strip!
+      el_text.gsub!(/ +/, ' ')
+      el_text.gsub!("\r", '')
+      el_text.gsub!("\n", '')
+      el_text.gsub!("\t", '')
+
+      # Strip space to left, and adjust position.
+      text_dup.lstrip!
+      link_map_current_location += text_dup_length - text_dup.length
+      text_dup_length = text_dup.length
+
+      # Need to force UTF encoding. Content coming out of Crawdad is ASCII
+      # 8-bit encoded, need to look into fixing this so we don't need to do
+      # the conversion here to avoid encoding exception in the sub.
+      utf_encoded_el_text = el_text.force_encoding(Encoding::UTF_8)
+      text_dup.sub!(/^#{Regexp.quote(utf_encoded_el_text)}/, '') # Strip word
+
+      text_length = text_dup_length - text_dup.length
       attributes = el.attributes
+
       if el.name == 'a'
         @link_map << [
-          link_map_current_location,               # From
-          link_map_current_location + text_length, # To
-          text,                                    # Text
-          attributes                               # Link Attributes
+          link_map_current_location,                    # From
+          link_map_current_location + text_length,      # To
+          el_text,                                      # Text
+          attributes                                    # Link Attributes
         ]
       end
+      text_dup_length = text_dup.length
       link_map_current_location += text_length
     end
 
@@ -161,11 +191,40 @@ class ParagraphLinePrinter
       end
     end
     last_token = tokens.last
+    line_length = line.length
+
+    add_hyphen = false
     if last_token.class == Crawdad::Tokens::Penalty && last_token[:flagged] == 1
       line << "-"
+      add_hyphen = true
+    end
+
+    # Superimpose links
+    @link_map.each do |from, to, text, attributes|
+      if (@character_index <= to) && (from <= @character_index + line_length)
+        # Splice in the link.
+        begin_splice = [@character_index, from].max - @character_index
+        end_splice = [@character_index + line_length, to].min - @character_index
+
+        # If add hyphen, and overlaps the end, swollow hyphen
+        if (end_splice == line_length) && add_hyphen
+          end_splice += 1
+        end
+
+        content = line[begin_splice...end_splice]
+        line[begin_splice...end_splice] = "<a #{attributes.map { |k, v| "#{k}=\"#{v.value}\"" }.join}>#{content}</a>"
+
+        #line[begin_splice...end_splice] = "our"
+        #line[end_splice] = "our"
+        # In range
+      end
     end
 
     @index += 1
+
+    @character_index += line_length
+
+    @character_index += 1 unless add_hyphen
 
     "<span class=\"line\">#{line}</span>"
   end

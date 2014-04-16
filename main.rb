@@ -38,7 +38,6 @@ class LineBreakingService < Goliath::API
     doc = Nokogiri::HTML(html)
     paragraphs = doc.css("body > p")
 
-
     column_width = LinearMeasure.new("#{width}px")
     font_profile = options[:profile] || FontProfile.get('crimson_text', font_profiles_path: FONT_PROFILES_PATH)
 
