@@ -159,8 +159,41 @@ class ParagraphLinePrinter
     if @index == 0
       @paragraph.to_html
     else
-      "<p class=\"continued\">#{@remaining_text}</p>"
+      remaining_text_with_links
+      "<p class=\"continued\">#{remaining_text_with_links}</p>"
     end
+  end
+
+  # Returns remaining_text with links reapplied.
+  def remaining_text_with_links
+    line = @remaining_text.dup.lstrip
+
+    line_length = line.length
+
+    # Superimpose links
+    inserted_link_offset = 0 # Record offset that should be honered due to inserted links.
+
+    @link_map.each do |from, to, text, attributes|
+      if (@character_index <= to) && (from <= @character_index + line_length)
+        # Splice in the link.
+        begin_splice = [@character_index, from].max - @character_index
+        end_splice = [@character_index + line_length, to].min - @character_index
+
+        # If add hyphen, and overlaps the end, swollow hyphen
+        if (end_splice == line_length) && add_hyphen
+          end_splice += 1
+        end
+
+        range = (begin_splice+inserted_link_offset)...(end_splice+inserted_link_offset)
+        content = line[range]
+        starting_length = line.length
+        line[range] = "<a #{attributes.map { |k, v| "#{k}=\"#{v.value}\"" }.join}>#{content}</a>"
+        new_length = line.length
+        inserted_link_offset += new_length - starting_length
+      end
+    end
+
+    line
   end
 
   def get_next_line
