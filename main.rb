@@ -75,9 +75,13 @@ class LineBreakingService < Goliath::API
 
       # Load next paragraph stream if needed.
       if current_paragraph_line_printer.exhasusted?
+        logger.info "Loaded next line printer #{line_count}"
         current_paragraph_line_printer = paragraph_line_printers.shift
       end
     end
+
+
+
 
     overflow_html = ""
     if overflowed

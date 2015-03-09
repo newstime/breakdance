@@ -11,7 +11,13 @@ class ParagraphLinePrinter
     @font_profiles = font_profiles
 
     @text = @paragraph.text # Just text for now.
-    @remaining_text = @text
+    @remaining_text = @text.dup
+
+    @remaining_text.strip!
+    @remaining_text.gsub!(/ +/, ' ')
+    @remaining_text.gsub!("\r", '')
+    @remaining_text.gsub!("\n", '')
+    @remaining_text.gsub!("\t", '')
 
     # ## Construct Link Map
     #
@@ -261,6 +267,14 @@ class ParagraphLinePrinter
     @character_index += line_length
 
     @character_index += 1 unless add_hyphen
+
+    # As a good measure, ensure each line has at least 15 characters of type on
+    # it. This helps to ensure lines do not collaspe into one another is the is
+    # only a few characters on the last line, and room for it on the previous
+    # line, even though the typesetting algorymtm added a break.
+    if line.length < 15
+      (15 - line.length).times { line << "&nbsp;" }
+    end
 
     "<span class=\"line\">#{line}</span>"
   end
