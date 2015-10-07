@@ -117,7 +117,7 @@ truly a wide open atmosphere.
 
 ![Screen Capture of Rendered Output](examples/gettysburg_address.png)
 
-See [examples/gettysburg_address.html]() for styles.
+See [[examples/gettysburg_address.html]] for styles.
 
 
 #### Overflow Reserve and Continuations
