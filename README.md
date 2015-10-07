@@ -188,7 +188,7 @@ effect to string text areas together.
 
     parsed_response = JSON.parse(response.body)["html"]
     typeset_html    = parsed_response["html"]
-    overflow_html    = parsed_response["overflow_html"]
+    overflow_html   = parsed_response["overflow_html"]
 
     puts typeset_html # => (formatted for easy reading)
     # <p class="typeset">
