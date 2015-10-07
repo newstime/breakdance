@@ -244,6 +244,41 @@ handled appropriately, and hyphenated where need be. When a link is broken over 
 line, two links are generated, both pointing to the same resource, one at the
 end of the first line, and the other at the beginning of the next.
 
+### Font Profiles
+
+A font profile is used to tell the typesetter the widths of each of the
+characters in the font. This information is required, and must be accurate for
+typesetting to work.
+
+A number of font profiles are included in config/font_profiles, which match the
+respectively named fonts.
+
+Crimson Text is a great font for typesetting and has an open font license, so is
+free to use, and highly recommended. (Thank you Nicolas Spalinger & Victor
+Gaultney)
+
+
+#### Creating Font Profiles
+
+To create a font profile, use the font_profiler tool in the tools directory,
+which is an html file.
+
+Open tools/font_profile.html in a text editor, and update the commented sections
+to reflect the font you wish to profile. Namely, loading, and updating the
+profiles object hash, which directs the profiler.
+
+After updating the code, load the webpage in a browser and give it a moment to
+work. The profile should be spewed out as json. You may copy this, save to a
+file in config/font_profiles, with the .json extension.
+
+
+#### Configuring Typesetter with a Font Profile
+
+Choosing the font profile is done on line 42 in main.rb.
+
+Currently, this must be done manually and the server restarted. This would be
+better as a specifiable option in the api, but this is how it works for now.
+
 ### Installation
 
 Note: You need a functional installation of Ruby, version 2.

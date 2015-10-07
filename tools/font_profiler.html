@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Font Profiler</title>
+	<script src="js/jquery.js"></script>
+	<script src="js/underscore.js"></script>
+	<script src="js/webfont.js"></script>
+</head>
+<body>
+		<!-- This profiles a font. -->
+		<div class="container">
+			<span id="char">?</span>
+			<div id="output"></div>
+		</div>
+
+		<script>
+		$(function() {
+
+				// ## Load the font to profile
+				//
+				// Font can be loaded using the WebFont tool, or in any other way, but
+				// must be present for the profiling to occur. To profile a Google font,
+				// update the families list here.
+				WebFont.load({
+					google: {
+						families: ['Trykker']
+					}
+				});
+
+				// Update the profiles object with the fonts, with size, weight and
+				// style to be included in the font profile. This example profiles
+				// various weights and sizes of Trykker.
+				var profiles = {
+					"normal": {
+						"font-family": "Trykker, serif",
+						"font-size": "14px",
+						"font-weight": "400",
+						"font-style": "normal"
+					},
+					"bold": {
+						"font-family": "Trykker, serif",
+						"font-size": "14px",
+						"font-weight": "600",
+						"font-style": "normal"
+					},
+					"italic": {
+						"font-family": "Trykker, serif",
+						"font-size": "14px",
+						"font-weight": "400",
+						"font-style": "italic"
+					},
+					"bold-italic": {
+						"font-family": "Trykker, serif",
+						"font-size": "14px",
+						"font-weight": "600",
+						"font-style": "italic"
+					}
+				};
+
+				var el = $("#char");
+
+				_.each(profiles, function(attributes, name) {
+						el.css("font-family", attributes["font-family"]);
+						el.css("font-size", attributes["font-size"]);
+						el.css("font-weight", attributes["font-weight"]);
+						el.css("font-style", attributes["font-style"]);
+
+						var map = {};
+						// ASCII 32-126
+
+						ascii_codes = _.range(32, 126);
+						ascii_codes.push(8212);
+						ascii_codes.push(8220); // Left double quotation
+						ascii_codes.push(8221); // Right double quotation
+						ascii_codes.push(8216); // left single quotation mark
+						ascii_codes.push(8217); // right single quotation mark
+
+
+						var characters = {};
+						_.each(ascii_codes, function(code) {
+							var character = String.fromCharCode(code);
+							characters[code.toString()] = {
+								'character': character,
+								'html': _.escape(character)
+							};
+						});
+
+						characters['32']['html'] = "&nbsp;" // Use non-breaking space for taking measurements.
+
+						_.each(characters, function(charAttrs, charCode) {
+							console.log(charCode)
+							el.html(charAttrs.html);
+							charWidth = el.width();
+							map[charCode.toString()] = charWidth;
+							_.each(characters, function(charAttrsB, charCodeB) {
+								el.html(charAttrs.html + charAttrsB.html);
+								map[charCode + '-' + charCodeB] = el.width() - charWidth;
+							})
+						});
+
+						attributes["map"] = map;
+				});
+
+				// Show results
+				el.remove();
+				$("#output").html(JSON.stringify(profiles, null, 1));
+
+		})
+		</script>
+
+
+  </body>
+</html>
