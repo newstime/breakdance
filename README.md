@@ -117,7 +117,7 @@ truly a wide open atmosphere.
 
 ![Screen Capture of Rendered Output](examples/gettysburg_address.png)
 
-See [[examples/gettysburg_address.html]] for styles.
+See [examples/gettysburg_address.html](examples/gettysburg_address.html) for styles.
 
 
 #### Overflow Reserve and Continuations
@@ -239,7 +239,7 @@ effect to string text areas together.
 
 #### HTML Links
 
-It is possible to include standard html links in the text, and the will be
+It is possible to include standard html links in the text, and they will be
 handled appropriately, and hyphenated where need be. When a link is broken over a
 line, two links are generated, both pointing to the same resource, one at the
 end of the first line, and the other at the beginning of the next.
