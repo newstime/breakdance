@@ -30,28 +30,30 @@
 				// Update the profiles object with the fonts, with size, weight and
 				// style to be included in the font profile. This example profiles
 				// various weights and sizes of Trykker.
-				var profiles = {
+        var fontName = "Times New Roman";
+        var fontSize = '112px';
+        var profiles = {
 					"normal": {
-						"font-family": "Trykker, serif",
-						"font-size": "14px",
+						"font-family": fontName,
+						"font-size": fontSize,
 						"font-weight": "400",
 						"font-style": "normal"
 					},
 					"bold": {
-						"font-family": "Trykker, serif",
-						"font-size": "14px",
+						"font-family": fontName,
+						"font-size": fontSize,
 						"font-weight": "600",
 						"font-style": "normal"
 					},
 					"italic": {
-						"font-family": "Trykker, serif",
-						"font-size": "14px",
+						"font-family": fontName,
+						"font-size": fontSize,
 						"font-weight": "400",
 						"font-style": "italic"
 					},
 					"bold-italic": {
-						"font-family": "Trykker, serif",
-						"font-size": "14px",
+						"font-family": fontName,
+						"font-size": fontSize,
 						"font-weight": "600",
 						"font-style": "italic"
 					}
@@ -90,11 +92,11 @@
 						_.each(characters, function(charAttrs, charCode) {
 							console.log(charCode)
 							el.html(charAttrs.html);
-							charWidth = el.width();
+							charWidth = Math.round(el.width()/7*100)/100;
 							map[charCode.toString()] = charWidth;
 							_.each(characters, function(charAttrsB, charCodeB) {
 								el.html(charAttrs.html + charAttrsB.html);
-								map[charCode + '-' + charCodeB] = el.width() - charWidth;
+								map[charCode + '-' + charCodeB] = Math.round( (el.width()/7-charWidth) *100)/100;
 							})
 						});
 

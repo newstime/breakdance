@@ -81,7 +81,7 @@ class ParagraphLinePrinter
     @continued = @classes.include?('continued') # Indicates if paragraph has already been opened.
 
     width = options[:width] || 284
-    tolorence = options[:tolerence] || 10
+    tolerence = options[:tolerence] || 10
 
     if @continued
       indent = 0
@@ -91,7 +91,7 @@ class ParagraphLinePrinter
 
     stream = Crawdad::HtmlTokenizer.new(FontProfile2.get('minion', font_profiles_path: options[:font_profiles_path])).paragraph(@text, :hyphenation => true, indent: indent)
     para = Crawdad::Paragraph.new(stream, :width => width)
-    @lines = para.lines(tolorence)
+    @lines = para.lines(tolerence)
     @line_count = @lines.count
   end
 
