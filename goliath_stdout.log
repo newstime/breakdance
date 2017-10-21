@@ -1,0 +1,14 @@
+/Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:321:in `delete': No such file or directory @ unlink_internal - ./goliath.pid (Errno::ENOENT)
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:321:in `remove_pid'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:223:in `block in run'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:205:in `fork'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:205:in `run'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/application.rb:111:in `run!'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/application.rb:133:in `block in <module:Goliath>'
+/Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:321:in `delete': No such file or directory @ unlink_internal - ./goliath.pid (Errno::ENOENT)
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:321:in `remove_pid'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:223:in `block in run'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:205:in `fork'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/runner.rb:205:in `run'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/application.rb:111:in `run!'
+	from /Users/rashiki/.gem/ruby/2.2.8/gems/goliath-1.0.6/lib/goliath/application.rb:133:in `block in <module:Goliath>'
