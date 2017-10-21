@@ -63,15 +63,8 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
-    columnize (0.9.0)
     connection_pool (1.2.0)
     cookiejar (0.3.0)
-    debugger (1.6.8)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.3.5)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.3.8)
     dotenv (0.8.0)
     em-http-request (1.1.0)
       addressable (>= 2.3.4)
@@ -161,7 +154,6 @@ PLATFORMS
 
 DEPENDENCIES
   crawdad!
-  debugger
   em-http-request
   em-synchrony
   foreman
