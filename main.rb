@@ -16,7 +16,6 @@ class LineBreakingService < Goliath::API
   use Goliath::Rack::Params
   use Goliath::Rack::Formatters::JSON
   use Goliath::Rack::Render
-  # use Goliath::Rack::Validation::RequestMethod, %w(POST)
 
   use Rack::Static,
     :urls => ['/images', '/js', '/css'],

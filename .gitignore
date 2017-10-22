@@ -1,4 +1,5 @@
 .env
 goliath.log
 goliath.log_stdout.log
+goliath_stdout.log
 goliath.pid
