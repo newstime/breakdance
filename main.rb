@@ -16,8 +16,22 @@ class LineBreakingService < Goliath::API
   use Goliath::Rack::Params
   use Goliath::Rack::Formatters::JSON
   use Goliath::Rack::Render
+  # use Goliath::Rack::Validation::RequestMethod, %w(POST)
+
+  use Rack::Static,
+    :urls => ['/images', '/js', '/css'],
+    :root => 'public'
 
   def response(env)
+
+    if env['REQUEST_METHOD'] == 'GET'
+      return [
+        200,
+        {'Content-Type'  => 'text/html'},
+        File.open('public/index.html', File::RDONLY)
+      ]
+    end
+
     #FontProfile
     logger.info "Processing Request #{params}"
 
