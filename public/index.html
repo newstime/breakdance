@@ -2,10 +2,12 @@
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title>Line Break Service Demo</title>
+
   <script
     src="https://code.jquery.com/jquery-3.2.1.min.js"
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
+
   <script type="text/javascript" charset="utf-8">
     $(function() {
       var form = $("#lbs_test_form"),
@@ -112,8 +114,13 @@
 
   <style>
     body {
-      background-color: red;
+      background-color: #f70cef;
       color: white;
+    }
+
+    #super{
+      color: black;
+      font-size: 117px;
     }
   </style>
 
@@ -122,9 +129,7 @@
 
 <body>
 
-<H1>Superbreak</H1>
-
-<h1 id="line_break_service_demo">Line Break Service Demo</h1>
+<H1 id='super'>Superbreak</H1>
 
 <form id="lbs_test_form" action="/" method="POST" accept-charset="utf-8">
   <label for="width">Width</label><input type="text/submit/hidden/button" name="width" value="284" id="width">
