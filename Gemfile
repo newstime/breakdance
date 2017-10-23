@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 ruby "2.2.8"
 
+gem 'rack'
 gem 'foreman'
 gem 'goliath'
 gem 'em-http-request'

@@ -121,6 +121,7 @@ DEPENDENCIES
   foreman
   goliath
   nokogiri (~> 1.6.0)
+  rack
   sidekiq
   superbreak!
   yajl-ruby
