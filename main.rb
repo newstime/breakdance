@@ -39,6 +39,7 @@ class LineBreakingService < Goliath::API
     line_height        = (params['line_height'] || '20px').to_i
     overflow_reserve   = (params['overflow_reserve'] || '0px').to_i
     font_family        = (params['font_family'] || 'crimson_text').downcase.gsub(' ', '_')
+    font_size          = (params['font_size'] || '12pt').to_f * (16.0/12)
     indent             = (params['indent'] || '40px').to_i
 
     # Caluclate limit based on line height
@@ -55,7 +56,7 @@ class LineBreakingService < Goliath::API
     column_width = LinearMeasure.new("#{width}px")
     font_profile = options[:profile] || FontProfile.get(font_family, font_profiles_path: FONT_PROFILES_PATH)
 
-    options = { width: width, font_profiles_path: FONT_PROFILES_PATH, indent: indent, tolerence: 10 }
+    options = { width: width, font_profiles_path: FONT_PROFILES_PATH, indent: indent, tolerence: 10, font_size: font_size }
     paragraph_line_printers = paragraphs.map { |p| ParagraphLinePrinter.new(p, column_width, font_profile, options) }
 
     total_lines = paragraph_line_printers.map(&:line_count).inject(:+) || 0 # HACK

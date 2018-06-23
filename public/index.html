@@ -16,11 +16,16 @@
 
       form.submit(function(e) {
         e.preventDefault();
+
         var postData = form.serializeArray(),
             width    = $('#width').val(),
             height    = $('#height').val(),
             lineHeight    = $('#line_height').val(),
+            fontSize    = $('#font_size').val(),
             formURL  = form.attr("action");
+
+        //smudgdegee
+        postData[0]['value'] = parseInt(postData[0]['value']) - 14
 
         $.ajax({
           url: formURL,
@@ -30,7 +35,8 @@
           success:function(data, textStatus, jqXHR) {
             //data: return data from server
             resultsDiv.html(data["html"]);
-            resultsDiv.css({width: width, height: height, 'line-height': lineHeight});
+            resultsDiv.css({width: parseInt(width), height: height, 'line-height': lineHeight, 'font-size': fontSize});
+
             overflowHtmlTextarea.val(data["overflow_html"]);
             if(data["overflowed"] == true) {
               resultsDiv.append('<p class="text-center"><em><a href="">Continued on Page B4</a></em></p>'); // Example continuation
@@ -64,7 +70,7 @@
     }
 
     #results .typeset {
-      font-size: 16px;
+      /*font-size: 16px;*/
       color: #484c55;
       text-align: justify;
       text-indent: 40px;
@@ -135,6 +141,7 @@
   <label for="width">Width</label><input type="text/submit/hidden/button" name="width" value="284" id="width">
   <label for="height">Height</label><input type="text/submit/hidden/button" name="height" value="200" id="height">
   <label for="line_height">Line Height</label><input type="text/submit/hidden/button" name="line_height" value="20px" id="line_height"><br>
+  <label for="font_size">Font Size</label><input type="text/submit/hidden/button" name="font_size" value="12pt" id="font_size">
   <label for="overflow_reserve">Overflow Reserve</label><input type="text/submit/hidden/button" name="overflow_reserve" value="20" id="overflow_reserve">
   <input type="submit" value="Continue →"> <br>
   <label for="html">Html</label>

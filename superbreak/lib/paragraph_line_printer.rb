@@ -82,6 +82,8 @@ class ParagraphLinePrinter
 
     width = options[:width] || 284
     tolerence = options[:tolerence] || 10
+    font_size = (options[:font_size] || 16).to_f
+
 
     if @continued
       indent = 0
@@ -89,7 +91,7 @@ class ParagraphLinePrinter
       indent = options[:indent] || 40
     end
 
-    stream = Crawdad::HtmlTokenizer.new(FontProfile2.get('minion', font_profiles_path: options[:font_profiles_path])).paragraph(@text, :hyphenation => true, indent: indent)
+    stream = Crawdad::HtmlTokenizer.new(FontProfile2.get('minion', font_profiles_path: options[:font_profiles_path], font_size: font_size)).paragraph(@text, :hyphenation => true, indent: indent)
     para = Crawdad::Paragraph.new(stream, :width => width)
     @lines = para.lines(tolerence)
     @line_count = @lines.count
